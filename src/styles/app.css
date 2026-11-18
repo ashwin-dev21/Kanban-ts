@@ -1,0 +1,12 @@
+body {
+  font-family: Arial;
+  background: #e9ecef;
+  margin: 0;
+}
+/* TEST CASES
+1. Add task
+2. Edit task
+3. Delete task
+4. Move task
+5. Refresh persistence
+*/
