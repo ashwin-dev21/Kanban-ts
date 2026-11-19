@@ -8,7 +8,6 @@ const initial: Columns = {
   done: []
 }
 
-// Configuration to give each column a distinct visual identity
 const COLUMN_CONFIG: {
   key: keyof Columns
   label: string
@@ -18,19 +17,19 @@ const COLUMN_CONFIG: {
   {
     key: 'todo',
     label: 'To Do',
-    accentColor: '#64748b', // Slate
+    accentColor: '#64748b',
     badgeBg: '#f1f5f9'
   },
   {
     key: 'progress',
     label: 'In Progress',
-    accentColor: '#3b82f6', // Blue
+    accentColor: '#3b82f6',
     badgeBg: '#eff6ff'
   },
   {
     key: 'done',
     label: 'Done',
-    accentColor: '#10b981', // Emerald
+    accentColor: '#10b981',
     badgeBg: '#ecfdf5'
   }
 ]
@@ -65,21 +64,27 @@ export default function Board() {
 
   const totalTasks =
     tasks.todo.length + tasks.progress.length + tasks.done.length
+  const completedTasks = tasks.done.length
 
   return (
     <div style={styles.wrapper}>
-      {/* Clean Board Header */}
-      <header style={styles.header}>
-        <div>
-          <h1 style={styles.title}>Project Board</h1>
-          <p style={styles.subtitle}>
-            Track and manage your tasks across stages
-          </p>
+      {/* Compact Utility Bar (No duplicate title) */}
+      <div style={styles.toolbar}>
+        <div style={styles.breadcrumb}>
+          <span style={styles.workspaceTag}>Workspace</span>
+          <span style={styles.separator}>/</span>
+          <span style={styles.boardName}>Sprint Board</span>
         </div>
-        <div style={styles.totalBadge}>
-          {totalTasks} {totalTasks === 1 ? 'Task' : 'Tasks'}
+
+        <div style={styles.statsGroup}>
+          <span style={styles.statPill}>
+            Total: <strong>{totalTasks}</strong>
+          </span>
+          <span style={styles.statPill}>
+            Completed: <strong>{completedTasks}</strong>
+          </span>
         </div>
-      </header>
+      </div>
 
       {/* Columns Grid */}
       <div style={styles.boardGrid}>
@@ -94,7 +99,6 @@ export default function Board() {
                 borderTop: `3px solid ${accentColor}`
               }}
             >
-              {/* Status Indicator Pill */}
               <div style={styles.columnHeader}>
                 <span
                   style={{
@@ -115,7 +119,7 @@ export default function Board() {
               </div>
 
               <Column
-                title="" // Handled cleanly by the custom header above
+                title=""
                 type={key}
                 tasks={columnTasks}
                 addTask={addTask}
@@ -132,44 +136,52 @@ export default function Board() {
 
 const styles: Record<string, React.CSSProperties> = {
   wrapper: {
-    minHeight: '100vh',
-    backgroundColor: '#f8fafc', // Soft slate canvas background
-    padding: '32px 24px',
+    minHeight: 'calc(100vh - 64px)',
+    backgroundColor: '#f8fafc',
+    padding: '24px',
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif',
     color: '#0f172a',
     boxSizing: 'border-box'
   },
-  header: {
+  toolbar: {
     maxWidth: 1200,
-    margin: '0 auto 28px auto',
+    margin: '0 auto 20px auto',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: 12
   },
-  title: {
-    margin: 0,
-    fontSize: 24,
-    fontWeight: 700,
-    letterSpacing: '-0.02em',
-    color: '#0f172a'
+  breadcrumb: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    fontSize: 14
   },
-  subtitle: {
-    margin: '4px 0 0 0',
-    fontSize: 14,
-    color: '#64748b'
+  workspaceTag: {
+    color: '#64748b',
+    fontWeight: 500
   },
-  totalBadge: {
+  separator: {
+    color: '#cbd5e1'
+  },
+  boardName: {
+    color: '#0f172a',
+    fontWeight: 600
+  },
+  statsGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8
+  },
+  statPill: {
     backgroundColor: '#ffffff',
     border: '1px solid #e2e8f0',
-    padding: '6px 14px',
-    borderRadius: 999,
+    padding: '5px 12px',
+    borderRadius: 6,
     fontSize: 13,
-    fontWeight: 600,
-    color: '#334155',
-    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)'
+    color: '#475569'
   },
   boardGrid: {
     maxWidth: 1200,
@@ -182,11 +194,9 @@ const styles: Record<string, React.CSSProperties> = {
   columnCard: {
     backgroundColor: '#ffffff',
     border: '1px solid #e2e8f0',
-    borderRadius: 12,
+    borderRadius: 10,
     padding: 16,
-    boxShadow:
-      '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03)',
-    transition: 'transform 0.15s ease, box-shadow 0.15s ease'
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
   },
   columnHeader: {
     display: 'flex',
@@ -204,8 +214,7 @@ const styles: Record<string, React.CSSProperties> = {
   columnLabel: {
     fontSize: 14,
     fontWeight: 600,
-    color: '#1e293b',
-    letterSpacing: '-0.01em'
+    color: '#1e293b'
   },
   countBadge: {
     marginLeft: 'auto',
